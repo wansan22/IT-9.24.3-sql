@@ -1,0 +1,48 @@
+4 работа в перечне предметной области. В идеале писать всё большими, но это не меняет смысл.
+USE dbtest;
+CREATE TABLE connection_config (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    param_name VARCHAR(50) NOT NULL,   -- Как называется параметр
+    param_value VARCHAR(255),          -- Какое у него значение
+    description VARCHAR(300)           -- Что это означает
+);
+INSERT INTO connection_config (param_name, param_value, description) VALUES
+('mysql_host', '127.0.0.1', 'Адрес сервера MySQL'),
+('mysql_port', '3306', 'Порт MySQL (стандартный)'),
+('mysql_database', 'dbtest', 'Имя ЭТОЙ базы данных'),
+('mysql_username', 'root', 'Пользователь для подключения'),
+('mysql_password', '1234', 'Пароль '),
+('mysql_charset', 'utf8mb4', 'Чтобы русские буквы работали');
+
+Выявление ролей - это те данные которые я использовал для создания паролей и логинов.
+Отделения: Общая профилактика заболеваний Главный врач: Иванов Иван Иванович, доктор медицинский наук (Логин: dk_IvanovII, Пароль: Pa$$w0rd), кабинет: 201 Ильин Илья Ильич, терапевт, доктор-аспирант (Логин: dk_IlinII, Пароль: Pa$$w0rd), кабинет: 203 Петрова Елена Игоревна, Отоларинголог, кандидат медицинских наук (Логин: dk_PetrovaEI, Пароль: Pa$$w0rd), кабинет: 204 Хирургическое отделение Главный врач: Петров Пётр Петрович, доктор медицинских наук (Логин: dc_PetrovPP, Пароль: Pa$$w0rd), кабинет: 302 Персонал: Антонова Любовь Петровна, Хирург, кандидат медицинских наук (Логин: dc_AntonovaLP, Пароль: Pa$$w0rd), кабинет: 303 Егоров Егор Олегович, Физиотерапевт, доктор-аспирант (Логин: dc_EgorovEO, Пароль: Pa$$w0rd), кабинет: 305 Романова Ольга Петровна, медсестра, доктор-магистр (Логин: dc_RomanovaOP, Пароль: Pa$$w0rd), кабинет: 305
+create user dk_IvanovII@'127.0.0.1' identified by 'Pa$$w0rd';
+create user dk_IlinII@'127.0.0.1' identified by 'Pa$$w0rd';
+create user dk_PetrovaEI@'127.0.0.1' identified by 'Pa$$w0rd';
+create user dc_PetrovPP@'127.0.0.1' identified by 'Pa$$w0rd';
+create user dc_AntonovaLP@'127.0.0.1' identified by 'Pa$$w0rd';
+create user dc_EgorovEO@'127.0.0.1' identified by 'Pa$$w0rd';
+create user dc_RomanovaOP@'127.0.0.1' identified by 'Pa$$w0rd';
+GRANT ALL PRIVILEGES ON dbtest.* TO 'dk_IvanovII'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON dbtest.* TO 'dk_IlinII'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON dbtest.* TO 'dk_PetrovaEI'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON dbtest.* TO 'dc_PetrovPP'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON dbtest.* TO 'dc_AntonovaLP'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON dbtest.* TO 'dc_EgorovEO'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON dbtest.* TO 'dc_RomanovaOP'@'127.0.0.1';
+
+
+SHOW GRANTS FOR 'dk_IvanovII'@'127.0.0.1';
+SHOW GRANTS FOR 'dk_IlinII'@'127.0.0.1';
+SHOW GRANTS FOR 'dk_PetrovaEI'@'127.0.0.1';
+SHOW GRANTS FOR 'dc_PetrovPP'@'127.0.0.1';
+SHOW GRANTS FOR 'dc_AntonovaLP'@'127.0.0.1';
+SHOW GRANTS FOR 'dc_EgorovEO'@'127.0.0.1';
+SHOW GRANTS FOR 'dc_RomanovaOP'@'127.0.0.1';
+select * from mysql.user where user in ('dk_IvanovII', 'dk_IlinII', 'dk_PetrovaEI', 'dc_PetrovPP', 'dc_AntonovaLP','dc_EgorovEO','dc_RomanovaOP');
+
+SELECT * FROM mysql.db 
+WHERE db = 'dbtest' 
+  AND user IN ('dk_IvanovII', 'dk_IlinII', 'dk_PetrovaEI', 
+               'dc_PetrovPP', 'dc_AntonovaLP', 'dc_EgorovEO', 'dc_RomanovaOP');
+show databases; 
